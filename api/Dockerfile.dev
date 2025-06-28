@@ -1,0 +1,25 @@
+FROM golang:1.23-alpine
+
+RUN apk add --no-cache git curl
+
+RUN go install github.com/air-verse/air@v1.61.0
+RUN go install github.com/swaggo/swag/cmd/swag@latest
+
+
+WORKDIR /api
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+# Expõe a porta
+EXPOSE 5000
+
+CMD ["air"]
+
+
+
+
+
+

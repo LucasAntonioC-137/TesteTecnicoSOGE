@@ -5,7 +5,7 @@ FROM golang:1.23-alpine
 RUN apk add --no-cache git
 
 # Define a pasta de trabalho
-WORKDIR /app
+WORKDIR /api
 
 # Copia tudo da pasta api/ para o container
 COPY . .
@@ -20,4 +20,4 @@ RUN go build -o main main.go
 EXPOSE 5000
 
 # Comando padrão ao rodar o container
-CMD ["/app/main"]
+CMD ["/api/main"]

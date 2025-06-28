@@ -1,0 +1,150 @@
+basePath: /
+definitions:
+  models.CreateSuggestionInput:
+    properties:
+      collaborator_name:
+        example: João da Silva
+        type: string
+      description:
+        example: Sugestão para melhorar o fluxo de trabalho
+        type: string
+      sector:
+        example: TI
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      erro:
+        type: string
+    type: object
+  models.Suggestion:
+    properties:
+      collaborator_name:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id_suggestion:
+        type: integer
+      sector:
+        type: string
+      status:
+        type: string
+    type: object
+  models.UpdateStatusInput:
+    properties:
+      status:
+        example: open
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: lucas@example.com
+    name: Lucas
+  description: API de sugestões para exemplo.
+  title: Minha API Go
+  version: "1.0"
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Cria uma nova sugestão com os dados informados
+      parameters:
+      - description: Dados da nova sugestão
+        in: body
+        name: suggestion
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateSuggestionInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Criar sugestão
+      tags:
+      - suggestions
+  /suggestions:
+    get:
+      consumes:
+      - application/json
+      description: Retorna todas as sugestões se você optar por não usar nenhum filtro,
+        mas também é possível usar um filtro de cada vez ou até mesmo os dois em conjunto
+      parameters:
+      - description: 'Status da sugestão (ex: open, implemented, under review)'
+        in: query
+        name: status
+        type: string
+      - description: Setor relacionado à sugestão
+        in: query
+        name: sector
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Suggestion'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Buscar sugestões com ou sem filtros
+      tags:
+      - suggestions
+  /suggestions/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Altera o status de uma sugestão existente pelo ID
+      parameters:
+      - description: ID da sugestão
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Novo status da sugestão
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateStatusInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Atualizar status da sugestão
+      tags:
+      - suggestions
+swagger: "2.0"

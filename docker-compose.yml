@@ -2,18 +2,6 @@ version: '3.9'
 
 services:
 
-  go_api:
-    build:
-      context: ./api         # aponta para a pasta onde está o Dockerfile
-    container_name: go_api
-    ports:
-      - "5000:5000"
-    depends_on:
-      - go_db
-    env_file:
-      - ./api/dotenv/.env
-    restart: always
-
   go_db:
     image: postgres:16
     container_name: go_db
@@ -24,6 +12,36 @@ services:
       - ./api/dotenv/.env
     ports:
       - 5432:5432
+
+  # go_api:
+  #   build:
+  #     context: ./api         # aponta para a pasta onde está o Dockerfile
+  #   container_name: go_api
+  #   volumes:
+  #     - ./api:/api
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - go_db
+  #   env_file:
+  #     - ./api/dotenv/.env
+  #   restart: always
+  
+  go_api_dev:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.dev
+    container_name: go_api_dev
+    working_dir: /api
+    volumes:
+      - ./api:/api               # Monta código para hot reload
+    ports:
+      - "5000:5000"              # Porta diferente para não conflitar
+    depends_on:
+      - go_db
+    env_file:
+      - ./api/dotenv/.env
+    restart: always
 
 volumes:
   postgres_data: {}

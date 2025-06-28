@@ -14,7 +14,7 @@ func NewSuggestionInterface(database *sql.DB) *Suggestions {
 	return &Suggestions{database}
 }
 
-// Criação de sugestoes no banco de dados
+// CreateSuggestion se comunica com o banco de dados para criar e incluir a sugestão na tabela
 func (repository *Suggestions) CreateSuggestion(suggestion models.Suggestion) (uint, error) {
 
 	statement, err := repository.database.Prepare(`
@@ -34,6 +34,7 @@ func (repository *Suggestions) CreateSuggestion(suggestion models.Suggestion) (u
 	return uint(id), nil
 }
 
+// GetSuggestions faz uma consulta ao banco de dados e retorna todas as sugestôes registradas
 func (repository *Suggestions) GetSuggestions() ([]models.Suggestion, error) {
 
 	lines, err := repository.database.Query(`SELECT id, collaborator_name, sector, description, status, created_at FROM suggestions`)
@@ -104,6 +105,7 @@ func (repository *Suggestions) FilterSuggestions(status, sector string) ([]model
 	var params []interface{}
 	paramCount := 1
 
+	// Verifica se foi passado algum parâmetro de filtro
 	if status != "" {
 		query += fmt.Sprintf(" AND status = $%d", paramCount)
 		params = append(params, status)
@@ -142,3 +144,25 @@ func (repository *Suggestions) FilterSuggestions(status, sector string) ([]model
 
 	return suggestions, nil
 }
+
+func (repository *Suggestions) UpdateSuggestionStatus(id int, status string) error {
+	statement, err := repository.database.Prepare("UPDATE suggestions SET status = $1 WHERE id = $2")
+	if err != nil {
+		return err
+	}
+
+	defer statement.Close()
+
+	if _, err := statement.Exec(status, id); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (repository *Suggestions) GetSuggestionStatusByID(id uint) (string, error) {
+	var status string
+	err := repository.database.QueryRow("SELECT status FROM suggestions WHERE id = $1", id).Scan(&status)
+	return status, err
+}
+
+

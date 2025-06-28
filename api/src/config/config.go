@@ -1,9 +1,9 @@
 package config
 
 import (
-	"log"
+	//"log"
 	"os"
-	"github.com/joho/godotenv"
+	//"github.com/joho/godotenv"
 )
 
 var (
@@ -16,10 +16,7 @@ var (
 )
 
 func LoadVar() {
-	err := godotenv.Load("../api/dotenv/.env")
-	if err != nil {
-		log.Println("Aviso: .env não carregado, variáveis do ambiente do sistema serão usadas.")
-	}
+
 	DB_user = os.Getenv("POSTGRES_USER")
 	DB_password = os.Getenv("POSTGRES_PASSWORD")
 	DB_port = os.Getenv("POSTGRES_PORT")

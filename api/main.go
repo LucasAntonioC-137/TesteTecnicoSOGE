@@ -1,3 +1,12 @@
+// @title Minha API Go
+// @version 1.0
+// @description API de sugestões para exemplo.
+// @host localhost:5000
+// @BasePath /
+
+// @contact.name Lucas
+// @contact.email lucas@example.com
+
 package main
 
 import (
@@ -6,6 +15,7 @@ import (
 	"go-api/src/routes"
 	"log"
 	"net/http"
+	_ "go-api/docs" // importa os arquivos gerados
 )
 
 func main() {

@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// LoadDataBase se conecta e carrega a base de dados
 func LoadDataBase() (*sql.DB, error) {
 	dataSourceName := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",

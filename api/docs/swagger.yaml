@@ -81,17 +81,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retorna todas as sugestões se você optar por não usar nenhum filtro,
-        mas também é possível usar um filtro de cada vez ou até mesmo os dois em conjunto
-      parameters:
-      - description: 'Status da sugestão (ex: open, implemented, under review)'
-        in: query
-        name: status
-        type: string
-      - description: Setor relacionado à sugestão
-        in: query
-        name: sector
-        type: string
+      description: Lista todas as sugestões cadastradas no banco de dados
       produces:
       - application/json
       responses:
@@ -109,7 +99,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/models.ErrorResponse'
-      summary: Buscar sugestões com ou sem filtros
+      summary: Lista as sugestões
       tags:
       - suggestions
   /suggestions/{id}/status:
@@ -145,6 +135,60 @@ paths:
           schema:
             $ref: '#/definitions/models.ErrorResponse'
       summary: Atualizar status da sugestão
+      tags:
+      - suggestions
+  /suggestions/grouped-by-sector:
+    get:
+      description: Se nenhum setor for informado, retorna sugestões agrupadas por
+        setor. Se um setor for passado, retorna apenas as sugestões com aquele setor.
+      parameters:
+      - description: 'Filtrar por setor (ex: IT, HR, Logistics)'
+        in: query
+        name: sector
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.Suggestion'
+              type: array
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Listar sugestões agrupadas ou filtradas por setor
+      tags:
+      - suggestions
+  /suggestions/grouped-by-status:
+    get:
+      description: Se nenhum status for informado, retorna sugestões agrupadas por
+        status. Se um status for passado, retorna apenas as sugestões com aquele status.
+      parameters:
+      - description: Filtrar por status (open, under review, implemented)
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.Suggestion'
+              type: array
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Listar sugestões agrupadas ou filtradas por status
       tags:
       - suggestions
 swagger: "2.0"

@@ -62,6 +62,7 @@ func CreateSuggestion(w http.ResponseWriter, r *http.Request) {
 		answers.Erro(w, http.StatusUnprocessableEntity, err)
 		return
 	}
+	fmt.Print("CHEGUEI AQUI")
 
 	var suggestion models.Suggestion
 
@@ -95,21 +96,60 @@ func CreateSuggestion(w http.ResponseWriter, r *http.Request) {
 	answers.JSON(w, http.StatusCreated, suggestion.ID)
 }
 
-// GetSuggestionsWithFilters retorna todas as sugestões ou sugestões filtradas por status e setor
-// @Summary Buscar sugestões com ou sem filtros
-// @Description Retorna todas as sugestões se você optar por não usar nenhum filtro, mas também é possível usar um filtro de cada vez ou até mesmo os dois em conjunto
+// GetSuggestionsGroupedByStatus retorna sugestões agrupadas ou filtradas por status
+// @Summary Listar sugestões agrupadas ou filtradas por status
+// @Description Se nenhum status for informado, retorna sugestões agrupadas por status. Se um status for passado, retorna apenas as sugestões com aquele status.
 // @Tags suggestions
-// @Accept json
 // @Produce json
-// @Param status query string false "Status da sugestão (ex: open, implemented, under review)"
-// @Param sector query string false "Setor relacionado à sugestão"
-// @Success 200 {array} models.Suggestion
-// @Failure 400 {object} models.ErrorResponse
+// @Param status query string false "Filtrar por status (open, under review, implemented)"
+// @Success 200 {object} map[string][]models.Suggestion
 // @Failure 500 {object} models.ErrorResponse
-// @Router /suggestions [get]
-func GetSuggestionsWithFilters(w http.ResponseWriter, r *http.Request) {
-	// Pega os filtros da URL, se existirem
+// @Router /suggestions/grouped-by-status [get]
+func GetSuggestionsGroupedByStatus(w http.ResponseWriter, r *http.Request) {
 	status := r.URL.Query().Get("status")
+
+	db, err := db.LoadDataBase()
+	if err != nil {
+		answers.Erro(w, http.StatusInternalServerError, err)
+		return
+	}
+	defer db.Close()
+
+	rep := repository.NewSuggestionInterface(db)
+
+	// Se o status foi informado, filtra por ele
+	if status != "" {
+		suggestions, err := rep.FilterSuggestions(status, "")
+		if err != nil {
+			answers.Erro(w, http.StatusInternalServerError, err)
+			return
+		}
+		answers.JSON(w, http.StatusOK, map[string][]models.Suggestion{
+			status: suggestions,
+		})
+		return
+	}
+
+	// Caso contrário, retorna agrupado por status
+	grouped, err := rep.GetSuggestionsGroupedByStatus()
+	if err != nil {
+		answers.Erro(w, http.StatusInternalServerError, err)
+		return
+	}
+
+	answers.JSON(w, http.StatusOK, grouped)
+}
+
+// GetSuggestionsGroupedBySector retorna sugestões agrupadas ou filtradas por setor
+// @Summary Listar sugestões agrupadas ou filtradas por setor
+// @Description Se nenhum setor for informado, retorna sugestões agrupadas por setor. Se um setor for passado, retorna apenas as sugestões com aquele setor.
+// @Tags suggestions
+// @Produce json
+// @Param sector query string false "Filtrar por setor (ex: IT, HR, Logistics)"
+// @Success 200 {object} map[string][]models.Suggestion
+// @Failure 500 {object} models.ErrorResponse
+// @Router /suggestions/grouped-by-sector [get]
+func GetSuggestionsGroupedBySector(w http.ResponseWriter, r *http.Request) {
 	sector := r.URL.Query().Get("sector")
 
 	db, err := db.LoadDataBase()
@@ -119,16 +159,29 @@ func GetSuggestionsWithFilters(w http.ResponseWriter, r *http.Request) {
 	}
 	defer db.Close()
 
-	// Chama o repositório, passando os filtros (podem estar vazios)
 	rep := repository.NewSuggestionInterface(db)
-	suggestions, err := rep.FilterSuggestions(status, sector)
+
+	if sector != "" {
+		suggestions, err := rep.FilterSuggestions("", sector)
+		if err != nil {
+			answers.Erro(w, http.StatusInternalServerError, err)
+			return
+		}
+		answers.JSON(w, http.StatusOK, map[string][]models.Suggestion{
+			sector: suggestions,
+		})
+		return
+	}
+
+	grouped, err := rep.GetSuggestionsGroupedBySector()
 	if err != nil {
 		answers.Erro(w, http.StatusInternalServerError, err)
 		return
 	}
 
-	answers.JSON(w, http.StatusOK, suggestions)
+	answers.JSON(w, http.StatusOK, grouped)
 }
+
 
 // UpdateSuggestionStatus Atualiza o status de uma sugestão existente
 // @Summary Atualizar status da sugestão

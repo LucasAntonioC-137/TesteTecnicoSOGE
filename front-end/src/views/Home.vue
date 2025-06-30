@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">Fibralink Sugestões</h1>
+    <h1 class="title">Fomulário de sugestão</h1>
 
     <form @submit.prevent="enviarSugestao" class="formulario">
       <input v-model="nome" type="text" placeholder="Nome do colaborador" />
@@ -8,10 +8,20 @@
       <textarea v-model="descricao" placeholder="Descrição da sugestão"></textarea>
       <button type="submit">Enviar Sugestão</button>
     </form>
+
+    <!-- Botão Gerenciar sugestões -->
+    <button class="manage-button" @click="gerenciarSugestoes">
+      Gerenciar sugestões
+      <svg xmlns="http://www.w3.org/2000/svg" class="icon-person" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="20" height="20" >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A7 7 0 0112 15a7 7 0 016.879 2.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    </button>
   </div>
 </template>
 
 <script>
+import api from '../../api/axios';
+
 export default {
   name: 'Home',
   data() {
@@ -22,13 +32,25 @@ export default {
     }
   },
   methods: {
-    enviarSugestao() {
-      console.log('Sugestão enviada:', {
-        nome: this.nome,
-        setor: this.setor,
-        descricao: this.descricao
-      });
-      // Aqui você pode integrar com sua API futuramente
+    async enviarSugestao() {
+      try {
+        await api.post('/register', {
+            collaborator_name: this.nome,
+            sector: this.setor,
+            description: this.descricao
+        });
+
+        alert('Sugestão enviada com sucesso!');
+        this.nome = '';
+        this.setor = '';
+        this.descricao = '';
+      } catch (error) {
+        console.error('Erro ao enviar sugestão:', error);
+        alert('Erro ao enviar sugestão. Verifique os dados ou tente novamente.');
+      }
+    },
+    gerenciarSugestoes() {
+      this.$router.push('/suggestions');
     }
   }
 }
@@ -62,7 +84,7 @@ input,
 textarea {
   padding: 12px;
   font-size: 16px;
-  border: 2px solid blue;
+  border: 2px solid #00008B;
   border-radius: 8px;
   outline: none;
 }
@@ -73,7 +95,7 @@ textarea {
 }
 
 button {
-  background-color: blue;
+  background-color: #00008B;
   color: white;
   padding: 12px;
   border: none;
@@ -84,6 +106,36 @@ button {
 }
 
 button:hover {
-  background-color: darkblue;
+  background-color: blue;
 }
+
+button:active {
+  background-color: #000080; /* cor enquanto estiver clicado */
+}
+
+/* Estilo específico para o botão Gerenciar sugestões */
+.manage-button {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #008000; /* verde */
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.manage-button:hover {
+  background-color: #006400; /* verde escuro */
+}
+
+.manage-button:active {
+  background-color: #004d00;
+}
+
+.icon-person {
+  stroke: white;
+}
+
 </style>

@@ -11,9 +11,19 @@ CREATE TABLE suggestions (
 
 INSERT INTO suggestions (collaborator_name, sector, description, status)
 VALUES
-('Alice Johnson', 'Logistics', 'Implement a barcode system.', 'open'),
-('Bruno Silva', 'IT', 'Create an internal knowledge base.', 'under review'),
-('Carla Mendes', 'Customer Service', 'Add a chat option to the website.', 'implemented');
+
+('Lucas Ferreira', 'Finance', 'Criar relatórios mensais automáticos.', 'open'),
+('Thiago Costa', 'Suporte Técnico', 'Criar manual digital para atendimento ao cliente.', 'under review'),
+('Camila Ribeiro', 'Financeiro', 'Automatizar o envio de boletos aos clientes.', 'implemented'),
+('Sérgio Martins', 'TI', 'Implementar backup automático no servidor.', 'implemented'),
+('Juliana Rocha', 'RH', 'Implementar programa de bem-estar para colaboradores.', 'open'),
+('Marcos Vinícius', 'Operações', 'Otimizar a rota de entrega dos produtos.', 'under review'),
+('João Pedro', 'Comercial', 'Adicionar assinatura digital nos contratos.', 'implemented'),
+('Fernanda Lima', 'Marketing', 'Sugerir parceria com influenciadores locais.', 'open'),
+('Patrícia Almeida', 'Logística', 'Aumentar o espaço do estoque com prateleiras modulares.', 'under review'),
+('Diego Santos', 'TI', 'Melhorar a autenticação no sistema interno.', 'open'),
+('Amanda Lopes', 'RH', 'Adotar sistema de ponto eletrônico via app.', 'implemented');
+
 
 
 

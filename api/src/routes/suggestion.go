@@ -8,7 +8,7 @@ var suggestionRoutes = []Route{
 	{
 		URI: "/suggestions",
 		Method: http.MethodGet,
-		Function: controller.GetSuggestionsWithFilters,
+		Function: controller.GetSuggestions,
 	},
 	{
 		URI: "/register",
@@ -20,4 +20,15 @@ var suggestionRoutes = []Route{
 		Method: http.MethodPut,
 		Function: controller.UpdateSuggestionStatus,
 	},
+	{
+		URI: "/suggestions/grouped-by-status",
+		Method: http.MethodGet,
+		Function: controller.GetSuggestionsGroupedByStatus,
+	},
+	{
+		URI: "/suggestions/grouped-by-sector",
+		Method: http.MethodGet,
+		Function: controller.GetSuggestionsGroupedBySector,
+	},
+	
 }

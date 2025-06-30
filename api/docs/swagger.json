@@ -60,7 +60,7 @@
         },
         "/suggestions": {
             "get": {
-                "description": "Retorna todas as sugestões se você optar por não usar nenhum filtro, mas também é possível usar um filtro de cada vez ou até mesmo os dois em conjunto",
+                "description": "Lista todas as sugestões cadastradas no banco de dados",
                 "consumes": [
                     "application/json"
                 ],
@@ -70,21 +70,7 @@
                 "tags": [
                     "suggestions"
                 ],
-                "summary": "Buscar sugestões com ou sem filtros",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "Status da sugestão (ex: open, implemented, under review)",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Setor relacionado à sugestão",
-                        "name": "sector",
-                        "in": "query"
-                    }
-                ],
+                "summary": "Lista as sugestões",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -99,6 +85,86 @@
                         "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/suggestions/grouped-by-sector": {
+            "get": {
+                "description": "Se nenhum setor for informado, retorna sugestões agrupadas por setor. Se um setor for passado, retorna apenas as sugestões com aquele setor.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "suggestions"
+                ],
+                "summary": "Listar sugestões agrupadas ou filtradas por setor",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filtrar por setor (ex: IT, HR, Logistics)",
+                        "name": "sector",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Suggestion"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/suggestions/grouped-by-status": {
+            "get": {
+                "description": "Se nenhum status for informado, retorna sugestões agrupadas por status. Se um status for passado, retorna apenas as sugestões com aquele status.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "suggestions"
+                ],
+                "summary": "Listar sugestões agrupadas ou filtradas por status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Filtrar por status (open, under review, implemented)",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Suggestion"
+                                }
+                            }
                         }
                     },
                     "500": {

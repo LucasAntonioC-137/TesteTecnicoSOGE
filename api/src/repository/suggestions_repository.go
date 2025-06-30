@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	models "go-api/src/model"
 )
@@ -66,46 +67,17 @@ func (repository *Suggestions) GetSuggestions() ([]models.Suggestion, error) {
 	return suggestions, nil
 }
 
-func (repository *Suggestions) GetSuggestionsByStatus(status string) ([]models.Suggestion, error) {
-
-	lines, err := repository.database.Query(`
-		SELECT id, collaborator_name, sector, description, status, created_at
-		FROM suggestions
-		WHERE status = $1`, status)
-	if err != nil {
-		return nil, err
-	}
-
-	defer lines.Close()
-
-	var suggestions []models.Suggestion
-
-	for lines.Next() {
-		var suggestion models.Suggestion
-
-		if err = lines.Scan(
-			&suggestion.ID,
-			&suggestion.CollaboratorName,
-			&suggestion.Sector,
-			&suggestion.Description,
-			&suggestion.Status,
-			&suggestion.CreatedAt,
-		); err != nil {
-			return nil, err
-		}
-
-		suggestions = append(suggestions, suggestion)
-	}
-
-	return suggestions, nil
-}
-
+// FilterSuggestions retorna sugestões filtradas por um status ou setor. Se nenhum argumento for informado, retorna erro.
 func (repository *Suggestions) FilterSuggestions(status, sector string) ([]models.Suggestion, error) {
+	// Nenhum argumento foi informado, retorna erro
+	if status == "" && sector == "" {
+		return nil, errors.New("pelo menos um filtro (status ou setor) deve ser informado")
+	}
+
 	query := `SELECT id, collaborator_name, sector, description, status, created_at FROM suggestions WHERE 1=1`
 	var params []interface{}
 	paramCount := 1
 
-	// Verifica se foi passado algum parâmetro de filtro
 	if status != "" {
 		query += fmt.Sprintf(" AND status = $%d", paramCount)
 		params = append(params, status)
@@ -117,8 +89,6 @@ func (repository *Suggestions) FilterSuggestions(status, sector string) ([]model
 		paramCount++
 	}
 
-	fmt.Println(params...)
-
 	lines, err := repository.database.Query(query, params...)
 	if err != nil {
 		return nil, err
@@ -128,7 +98,46 @@ func (repository *Suggestions) FilterSuggestions(status, sector string) ([]model
 	var suggestions []models.Suggestion
 	for lines.Next() {
 		var suggestion models.Suggestion
-		err := lines.Scan(
+		if err := lines.Scan(
+			&suggestion.ID,
+			&suggestion.CollaboratorName,
+			&suggestion.Sector,
+			&suggestion.Description,
+			&suggestion.Status,
+			&suggestion.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		suggestions = append(suggestions, suggestion)
+	}
+
+	return suggestions, nil
+}
+
+// GetSuggestionsGroupedByStatus retorna todas as sugestões agrupadas por status (ordem: open, under review, implemented)
+func (repository *Suggestions) GetSuggestionsGroupedByStatus() ([]models.Suggestion, error) {
+	query := `
+		SELECT id, collaborator_name, sector, description, status, created_at
+		FROM suggestions
+		ORDER BY 
+			CASE 
+				WHEN status = 'open' THEN 1
+				WHEN status = 'under review' THEN 2
+				WHEN status = 'implemented' THEN 3
+				ELSE 4
+			END, created_at ASC
+	`
+
+	rows, err := repository.database.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var suggestions []models.Suggestion
+	for rows.Next() {
+		var suggestion models.Suggestion
+		err := rows.Scan(
 			&suggestion.ID,
 			&suggestion.CollaboratorName,
 			&suggestion.Sector,
@@ -144,6 +153,30 @@ func (repository *Suggestions) FilterSuggestions(status, sector string) ([]model
 
 	return suggestions, nil
 }
+
+// GetSuggestionsGroupedBySector retorna todas as sugestões agrupadas por setor
+func (repository *Suggestions) GetSuggestionsGroupedBySector() (map[string][]models.Suggestion, error) {
+	query := `SELECT id, collaborator_name, sector, description, status, created_at FROM suggestions ORDER BY sector`
+
+	rows, err := repository.database.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	grouped := make(map[string][]models.Suggestion)
+
+	for rows.Next() {
+		var s models.Suggestion
+		if err := rows.Scan(&s.ID, &s.CollaboratorName, &s.Sector, &s.Description, &s.Status, &s.CreatedAt); err != nil {
+			return nil, err
+		}
+		grouped[s.Sector] = append(grouped[s.Sector], s)
+	}
+
+	return grouped, nil
+}
+
 
 func (repository *Suggestions) UpdateSuggestionStatus(id int, status string) error {
 	statement, err := repository.database.Prepare("UPDATE suggestions SET status = $1 WHERE id = $2")

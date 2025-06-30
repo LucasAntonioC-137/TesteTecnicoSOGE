@@ -10,12 +10,15 @@
 package main
 
 import (
+	"fmt"
+	_ "go-api/docs" // importa os arquivos gerados
 	"go-api/src/config"
 	"go-api/src/repository/db"
 	"go-api/src/routes"
 	"log"
 	"net/http"
-	_ "go-api/docs" // importa os arquivos gerados
+
+	"github.com/gorilla/handlers"
 )
 
 func main() {
@@ -38,10 +41,12 @@ func main() {
 
 
 	// Teste de ping
-	log.Println("Servidor rodando na porta " + config.API_port + " ...")
-	err = http.ListenAndServe(":" + config.API_port, router)
-	if err != nil {
-		log.Fatal("Erro ao subir o servidor:", err)
-	}
+	fmt.Printf("Api is Running on port %s\n", config.API_port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", config.API_port),
+		handlers.CORS(
+			handlers.AllowedOrigins([]string{"http://localhost:5173", "http://localhost"}),
+			handlers.AllowedMethods([]string{"GET", "POST", "PUT"}),
+			handlers.AllowedHeaders([]string{"Content-Type", "Authorization"}),
+		)(router)))
 
 }

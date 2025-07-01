@@ -3,7 +3,7 @@ version: '3.9'
 networks:
   backend:
   frontend:
-  
+
 services:
 
   # Inicia o banco de dados
@@ -38,22 +38,6 @@ services:
     networks:
       - backend
       - frontend
-  
-  # go_api_dev:
-  #   build:
-  #     context: ./api
-  #     dockerfile: Dockerfile.dev
-  #   container_name: go_api_dev
-  #   working_dir: /api
-  #   volumes:
-  #     - ./api:/api              
-  #   ports:
-  #     - "5000:5000"              
-  #   depends_on:
-  #     - go_db
-  #   env_file:
-  #     - ./api/dotenv/.env
-  #   restart: always
 
   # Inicia o front-end em VUE 
   vue_front:

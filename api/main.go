@@ -4,8 +4,8 @@
 // @host localhost:5000
 // @BasePath /
 
-// @contact.name Lucas
-// @contact.email lucas@example.com
+// @contact.name Lucas Antonio
+// @contact.email lucas.antonio27@outlook.com
 
 package main
 
@@ -17,7 +17,6 @@ import (
 	"go-api/src/routes"
 	"log"
 	"net/http"
-
 	"github.com/gorilla/handlers"
 )
 

@@ -4,6 +4,7 @@ import (
 	 "net/http"
 	 "go-api/src/controller"
 )
+
 var suggestionRoutes = []Route{
 	{
 		URI: "/suggestions",
@@ -29,6 +30,5 @@ var suggestionRoutes = []Route{
 		URI: "/suggestions/grouped-by-sector",
 		Method: http.MethodGet,
 		Function: controller.GetSuggestionsGroupedBySector,
-	},
-	
+	},	
 }

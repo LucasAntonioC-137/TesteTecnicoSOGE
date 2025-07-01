@@ -102,7 +102,7 @@ func CreateSuggestion(w http.ResponseWriter, r *http.Request) {
 // @Tags suggestions
 // @Produce json
 // @Param status query string false "Filtrar por status (open, under review, implemented)"
-// @Success 200 {object} map[string][]models.Suggestion
+// @Success 200 {object} []models.Suggestion
 // @Failure 500 {object} models.ErrorResponse
 // @Router /suggestions/grouped-by-status [get]
 func GetSuggestionsGroupedByStatus(w http.ResponseWriter, r *http.Request) {
@@ -146,7 +146,7 @@ func GetSuggestionsGroupedByStatus(w http.ResponseWriter, r *http.Request) {
 // @Tags suggestions
 // @Produce json
 // @Param sector query string false "Filtrar por setor (ex: IT, HR, Logistics)"
-// @Success 200 {object} map[string][]models.Suggestion
+// @Success 200 {object} []models.Suggestion
 // @Failure 500 {object} models.ErrorResponse
 // @Router /suggestions/grouped-by-sector [get]
 func GetSuggestionsGroupedBySector(w http.ResponseWriter, r *http.Request) {

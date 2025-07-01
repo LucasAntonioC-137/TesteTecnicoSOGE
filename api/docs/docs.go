@@ -10,8 +10,8 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Lucas",
-            "email": "lucas@example.com"
+            "name": "Lucas Antonio",
+            "email": "lucas.antonio27@outlook.com"
         },
         "version": "{{.Version}}"
     },
@@ -124,12 +124,9 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/models.Suggestion"
-                                }
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Suggestion"
                             }
                         }
                     },
@@ -164,12 +161,9 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/models.Suggestion"
-                                }
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Suggestion"
                             }
                         }
                     },
@@ -303,8 +297,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:5000",
 	BasePath:         "/",
 	Schemes:          []string{},
-	Title:            "Minha API Go",
-	Description:      "API de sugestões para exemplo.",
+	Title:            "API Go para o projeto de sugestões",
+	Description:      "API de sugestões que faz a criação de sugestôes, retorno de sugestôes e alteração dos status.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

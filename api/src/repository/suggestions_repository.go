@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	models "go-api/src/model"
+	"go-api/src/model"
 )
 
 type Suggestions struct {
@@ -177,7 +177,7 @@ func (repository *Suggestions) GetSuggestionsGroupedBySector() (map[string][]mod
 	return grouped, nil
 }
 
-
+// UpdateSuggestionStatus a recebe atualiza o status da sugestão escolhida
 func (repository *Suggestions) UpdateSuggestionStatus(id int, status string) error {
 	statement, err := repository.database.Prepare("UPDATE suggestions SET status = $1 WHERE id = $2")
 	if err != nil {
@@ -192,6 +192,7 @@ func (repository *Suggestions) UpdateSuggestionStatus(id int, status string) err
 	return nil
 }
 
+// GetSuggestionStatusByID pega o status da sugestão com ID correspondente
 func (repository *Suggestions) GetSuggestionStatusByID(id uint) (string, error) {
 	var status string
 	err := repository.database.QueryRow("SELECT status FROM suggestions WHERE id = $1", id).Scan(&status)

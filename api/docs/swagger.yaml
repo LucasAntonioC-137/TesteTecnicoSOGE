@@ -41,10 +41,11 @@ definitions:
 host: localhost:5000
 info:
   contact:
-    email: lucas@example.com
-    name: Lucas
-  description: API de sugestões para exemplo.
-  title: Minha API Go
+    email: lucas.antonio27@outlook.com
+    name: Lucas Antonio
+  description: API de sugestões que faz a criação de sugestôes, retorno de sugestôes
+    e alteração dos status.
+  title: API Go para o projeto de sugestões
   version: "1.0"
 paths:
   /register:
@@ -152,11 +153,9 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              items:
-                $ref: '#/definitions/models.Suggestion'
-              type: array
-            type: object
+            items:
+              $ref: '#/definitions/models.Suggestion'
+            type: array
         "500":
           description: Internal Server Error
           schema:
@@ -179,11 +178,9 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              items:
-                $ref: '#/definitions/models.Suggestion'
-              type: array
-            type: object
+            items:
+              $ref: '#/definitions/models.Suggestion'
+            type: array
         "500":
           description: Internal Server Error
           schema:

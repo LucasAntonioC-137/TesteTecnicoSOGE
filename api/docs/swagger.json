@@ -1,11 +1,11 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API de sugestões para exemplo.",
-        "title": "Minha API Go",
+        "description": "API de sugestões que faz a criação de sugestôes, retorno de sugestôes e alteração dos status.",
+        "title": "API Go para o projeto de sugestões",
         "contact": {
-            "name": "Lucas",
-            "email": "lucas@example.com"
+            "name": "Lucas Antonio",
+            "email": "lucas.antonio27@outlook.com"
         },
         "version": "1.0"
     },
@@ -118,12 +118,9 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/models.Suggestion"
-                                }
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Suggestion"
                             }
                         }
                     },
@@ -158,12 +155,9 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/models.Suggestion"
-                                }
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Suggestion"
                             }
                         }
                     },

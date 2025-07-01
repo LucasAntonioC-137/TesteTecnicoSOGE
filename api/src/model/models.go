@@ -17,6 +17,7 @@ type Suggestion struct {
 	CreatedAt		 time.Time `json:"created_at"`
 }
 
+// Struct para uso da documentação no swagger
 type CreateSuggestionInput struct {
 	CollaboratorName string `json:"collaborator_name" example:"João da Silva"`
 	Sector           string `json:"sector" example:"TI"`

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # TesteTecnicoSOGE
 Projeto de teste para o SOGE
 =======
@@ -74,7 +73,3 @@ Você pode:
 ✅ Digitar um setor exato para visualizar apenas sugestões desse setor.
 
 ✅ Deixar em branco e clicar na lupa para exibir todas as sugestões ordenadas por setor.
-
-
-
->>>>>>> master

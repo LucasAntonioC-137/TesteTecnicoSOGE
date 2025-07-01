@@ -1,6 +1,6 @@
 # 💡 SOGE - Sistema de Sugestões de Colaboradores
 
-Projeto web completo para o recebimento e gerenciamento de sugestões enviadas por colaboradores da empresa. Desenvolvido com foco em organização, responsividade e facilidade de uso, o sistema é composto por uma API em Go, frontend em Vue.js e banco de dados PostgreSQL, todos containerizados via Docker.
+Projeto web simples e básico para o recebimento e gerenciamento de sugestões enviadas por colaboradores da empresa. Neste projeto eu implementei banco de dados, api e frontend.  
 
 ---
 

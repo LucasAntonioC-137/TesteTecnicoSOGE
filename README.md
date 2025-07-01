@@ -1,5 +1,3 @@
-# TesteTecnicoSOGE
-Projeto de teste para o SOGE
 =======
 # 💡 SOGE - Sistema de Sugestões de Colaboradores
 

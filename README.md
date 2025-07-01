@@ -1,4 +1,3 @@
-=======
 # 💡 SOGE - Sistema de Sugestões de Colaboradores
 
 Projeto web simples e básico para o recebimento e gerenciamento de sugestões enviadas por colaboradores da empresa. Neste projeto eu implementei banco de dados, api e frontend.  

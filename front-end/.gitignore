@@ -1,0 +1,27 @@
+# Ignorar dados persistentes do banco de dados
+/data/
+
+# Ignorar variáveis de ambiente sensíveis
+/api/dotenv/.env
+
+# Ignorar dependências do frontend
+/front-end/node_modules/
+/front-end/dist/
+/front-end/.vite/
+
+# Ignorar arquivos de log e temporários
+*.log
+*.tmp
+*.swp
+
+# Ignorar arquivos e pastas do sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar arquivos de build do Go
+/api/main
+/api/*.exe
+
+# Ignorar arquivos do editor (VS Code, etc.)
+.vscode/
+.idea/

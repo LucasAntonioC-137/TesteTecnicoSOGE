@@ -1,0 +1,191 @@
+basePath: /
+definitions:
+  models.CreateSuggestionInput:
+    properties:
+      collaborator_name:
+        example: João da Silva
+        type: string
+      description:
+        example: Sugestão para melhorar o fluxo de trabalho
+        type: string
+      sector:
+        example: TI
+        type: string
+    type: object
+  models.ErrorResponse:
+    properties:
+      erro:
+        type: string
+    type: object
+  models.Suggestion:
+    properties:
+      collaborator_name:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id_suggestion:
+        type: integer
+      sector:
+        type: string
+      status:
+        type: string
+    type: object
+  models.UpdateStatusInput:
+    properties:
+      status:
+        example: open
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: lucas.antonio27@outlook.com
+    name: Lucas Antonio
+  description: API de sugestões que faz a criação de sugestôes, retorno de sugestôes
+    e alteração dos status.
+  title: API Go para o projeto de sugestões
+  version: "1.0"
+paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Cria uma nova sugestão com os dados informados
+      parameters:
+      - description: Dados da nova sugestão
+        in: body
+        name: suggestion
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateSuggestionInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Criar sugestão
+      tags:
+      - suggestions
+  /suggestions:
+    get:
+      consumes:
+      - application/json
+      description: Lista todas as sugestões cadastradas no banco de dados
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Suggestion'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Lista as sugestões
+      tags:
+      - suggestions
+  /suggestions/{id}/status:
+    put:
+      consumes:
+      - application/json
+      description: Altera o status de uma sugestão existente pelo ID
+      parameters:
+      - description: ID da sugestão
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Novo status da sugestão
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateStatusInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: integer
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Atualizar status da sugestão
+      tags:
+      - suggestions
+  /suggestions/grouped-by-sector:
+    get:
+      description: Se nenhum setor for informado, retorna sugestões agrupadas por
+        setor. Se um setor for passado, retorna apenas as sugestões com aquele setor.
+      parameters:
+      - description: 'Filtrar por setor (ex: IT, HR, Logistics)'
+        in: query
+        name: sector
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Suggestion'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Listar sugestões agrupadas ou filtradas por setor
+      tags:
+      - suggestions
+  /suggestions/grouped-by-status:
+    get:
+      description: Se nenhum status for informado, retorna sugestões agrupadas por
+        status. Se um status for passado, retorna apenas as sugestões com aquele status.
+      parameters:
+      - description: Filtrar por status (open, under review, implemented)
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Suggestion'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.ErrorResponse'
+      summary: Listar sugestões agrupadas ou filtradas por status
+      tags:
+      - suggestions
+swagger: "2.0"

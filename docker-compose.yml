@@ -1,0 +1,61 @@
+version: '3.9'
+
+networks:
+  backend:
+  frontend:
+
+services:
+
+  # Inicia o banco de dados
+  go_db:
+    image: postgres:16
+    container_name: go_db
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d/
+    env_file:
+      - ./api/dotenv/.env
+    networks:
+      - backend
+    ports:
+      - 5432:5432
+
+  # Inicia a API em go
+  go_api:
+    build:
+      context: ./api         
+    container_name: go_api
+    working_dir: /api
+    volumes:
+      - ./api:/api
+    ports:
+      - "5000:5000"
+    depends_on:
+      - go_db
+    env_file:
+      - ./api/dotenv/.env
+    restart: always
+    networks:
+      - backend
+      - frontend
+
+  # Inicia o front-end em VUE 
+  vue_front:
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    container_name: vue_front
+    working_dir: /app
+    volumes:
+      - ./front-end:/app
+      - /app/node_modules # evita conflitos de node_modules
+    ports:
+      - "5173:5173"
+    restart: always
+    depends_on:
+      - go_api
+    networks:
+      - frontend
+  
+
+

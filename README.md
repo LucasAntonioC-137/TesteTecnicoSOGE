@@ -16,10 +16,9 @@ Projeto web simples e básico para o recebimento e gerenciamento de sugestões e
 
 ## 📦 Requisitos para Executar o Projeto
 
-Certifique-se de ter as seguintes ferramentas instaladas:
+O projeto roda em docker, então é necessário apenas ele para rodar.
 
 - [Docker](https://www.docker.com/)
-- [Docker Compose](https://docs.docker.com/compose/)
 
 ---
 

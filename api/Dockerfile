@@ -14,10 +14,10 @@ COPY . .
 RUN go mod tidy
 
 # Compila o projeto
-RUN go build -o main main.go
+RUN go build -o /main main.go
 
 # Expõe a porta
 EXPOSE 5000
 
 # Comando padrão ao rodar o container
-CMD ["/api/main"]
+CMD ["/main"]

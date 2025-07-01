@@ -12,7 +12,7 @@ CREATE TABLE suggestions (
 INSERT INTO suggestions (collaborator_name, sector, description, status)
 VALUES
 
-('Lucas Ferreira', 'Finance', 'Criar relatórios mensais automáticos.', 'open'),
+('Lucas Ferreira', 'Financeiro', 'Criar relatórios mensais automáticos.', 'open'),
 ('Thiago Costa', 'Suporte Técnico', 'Criar manual digital para atendimento ao cliente.', 'under review'),
 ('Camila Ribeiro', 'Financeiro', 'Automatizar o envio de boletos aos clientes.', 'implemented'),
 ('Sérgio Martins', 'TI', 'Implementar backup automático no servidor.', 'implemented'),

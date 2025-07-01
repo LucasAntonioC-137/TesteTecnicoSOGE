@@ -1,6 +1,6 @@
-// @title Minha API Go
+// @title API Go para o projeto de sugestões
 // @version 1.0
-// @description API de sugestões para exemplo.
+// @description API de sugestões que faz a criação de sugestôes, retorno de sugestôes e alteração dos status.
 // @host localhost:5000
 // @BasePath /
 
@@ -40,7 +40,7 @@ func main() {
 	router := routes.LoadRoutes()
 
 
-	// Teste de ping
+	// Iniciando a API
 	fmt.Printf("Api is Running on port %s\n", config.API_port)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", config.API_port),
 		handlers.CORS(

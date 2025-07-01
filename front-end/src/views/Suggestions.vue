@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <h1 class="title">Gerenciamento de sugestões</h1>
-
+    
+    <!-- Botões de filtro -->
     <div class="filter-options">
       <div class="filter-bar">
         <div class="dropdown">
@@ -25,7 +26,7 @@
           :class="{ ativo: showSetorSearch }"
           @click="toggleSetorSearch"
         >
-          Listar por setor
+          Filtrar por setor
         </button>
       </div>
 
@@ -40,11 +41,12 @@
       </div>
     </div>
 
+    <!-- Caixa de listagem de sugestôes -->
     <div class="lista-sugestoes">
       <div 
         class="sugestao" 
         v-for="(s, index) in sugestoes" 
-        :key="s.id"
+        :key="s.id_suggestion"
         @click="toggleDescricao(index)"
       >
         <div class="linha">
@@ -52,9 +54,9 @@
           <span>{{ s.sector }}</span>
           <span 
             class="status"
-            @click.stop="s.description && alterarStatus(index)"
+            @click.stop="s.exibeDescricao && alterarStatus(index)"
           >
-            <template v-if="s.description">
+            <template v-if="s.exibeDescricao">
               <button class="status-button">
                 {{ s.status }}
               </button>
@@ -134,10 +136,8 @@ export default {
           // Quando status for null (ou "Todos"), busca lista agrupada da API
           const response = await api.get('/suggestions/grouped-by-status');
 
-          // Caso a API retorne um array plano já com status:
           const agrupadas = response.data;
 
-          // Atualiza sugestões originais com os dados da API
           this.sugestoesOriginais = agrupadas.map(s => ({ ...s, exibeDescricao: false }));
 
         } else {
@@ -206,16 +206,17 @@ export default {
     },
 
     async alterarStatus(index) {
+
       const s = this.sugestoes[index];
       const statusList = ['open', 'under review', 'implemented'];
       const nextStatus = statusList[(statusList.indexOf(s.status) + 1) % statusList.length];
 
       try {
-        await api.put(`/suggestions/${s.id}/status`, { status: nextStatus });
+        await api.put(`/suggestions/${s.id_suggestion}/status`, { status: nextStatus });
         this.sugestoes[index].status = nextStatus;
 
         // Atualiza também sugestoesOriginais para manter sincronizado
-        const idxOriginal = this.sugestoesOriginais.findIndex(sug => sug.id === s.id);
+        const idxOriginal = this.sugestoesOriginais.findIndex(sug => sug.id_suggestion === s.id_suggestion);
         if (idxOriginal !== -1) {
           this.sugestoesOriginais[idxOriginal].status = nextStatus;
         }
@@ -230,18 +231,42 @@ export default {
 <style scoped>
 .container {
   background-color: white;
-  min-height: 100vh;
   padding: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: 100vh;
+  box-sizing: border-box;
+  .container {
+  min-height: 100vh;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05); /* novo */
+  border-radius: 12px; /* opcional para suavizar cantos */
+}
+
 }
 
 .title {
+  font-size: 36px;
+  font-weight: 700;
   color: red;
-  font-size: 32px;
+  position: relative;
+  padding-bottom: 8px;
   margin-bottom: 30px;
+  text-align: center;
 }
+
+.title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 60%;
+  height: 3px;
+  background-color: #00008B; /* Azul escuro */
+  border-radius: 2px;
+}
+
 
 .filter-options {
   display: flex;
@@ -358,13 +383,17 @@ export default {
 }
 
 .lista-sugestoes {
-  background-color: #f0f0f0; /* um cinza bem claro */
+  background-color: #f0f0f0;
   padding: 20px;
   border-radius: 10px;
   width: 100%;
   max-width: 900px;
-  margin: 0 auto 30px;
+  margin-bottom: 30px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+  flex: 1;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 .sugestao {

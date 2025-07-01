@@ -1,53 +1,66 @@
 version: '3.9'
 
+networks:
+  backend:
+  frontend:
+  
 services:
 
+  # Inicia o banco de dados
   go_db:
     image: postgres:16
     container_name: go_db
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./data:/var/lib/postgresql/data
       - ./init-db:/docker-entrypoint-initdb.d/
     env_file:
       - ./api/dotenv/.env
+    networks:
+      - backend
     ports:
       - 5432:5432
 
-  # go_api:
-  #   build:
-  #     context: ./api         # aponta para a pasta onde está o Dockerfile
-  #   container_name: go_api
-  #   volumes:
-  #     - ./api:/api
-  #   ports:
-  #     - "5000:5000"
-  #   depends_on:
-  #     - go_db
-  #   env_file:
-  #     - ./api/dotenv/.env
-  #   restart: always
-  
-  go_api_dev:
+  # Inicia a API em go
+  go_api:
     build:
-      context: ./api
-      dockerfile: Dockerfile.dev
-    container_name: go_api_dev
+      context: ./api         
+    container_name: go_api
     working_dir: /api
     volumes:
-      - ./api:/api               # Monta código para hot reload
+      - ./api:/api
     ports:
-      - "5000:5000"              # Porta diferente para não conflitar
+      - "5000:5000"
     depends_on:
       - go_db
     env_file:
       - ./api/dotenv/.env
     restart: always
+    networks:
+      - backend
+      - frontend
+  
+  # go_api_dev:
+  #   build:
+  #     context: ./api
+  #     dockerfile: Dockerfile.dev
+  #   container_name: go_api_dev
+  #   working_dir: /api
+  #   volumes:
+  #     - ./api:/api              
+  #   ports:
+  #     - "5000:5000"              
+  #   depends_on:
+  #     - go_db
+  #   env_file:
+  #     - ./api/dotenv/.env
+  #   restart: always
 
-  vue_front_dev:
+  # Inicia o front-end em VUE 
+  vue_front:
     build:
       context: ./front-end
       dockerfile: Dockerfile
-    container_name: vue_front_dev
+    container_name: vue_front
     working_dir: /app
     volumes:
       - ./front-end:/app
@@ -56,8 +69,9 @@ services:
       - "5173:5173"
     restart: always
     depends_on:
-      - go_api_dev
+      - go_api
+    networks:
+      - frontend
   
 
-volumes:
-  postgres_data: {}
+

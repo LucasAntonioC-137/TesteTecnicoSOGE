@@ -1,6 +1,8 @@
 <template>
   <div class="container">
-    <h1 class="title">Fomulário de sugestão</h1>
+    <h1 class="title">
+      Formulário de sugestão
+    </h1>
 
     <form @submit.prevent="enviarSugestao" class="formulario">
       <input v-model="nome" type="text" placeholder="Nome do colaborador" />
@@ -64,13 +66,32 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.05); /* novo */
+  border-radius: 12px; /* opcional para suavizar cantos */
 }
 
 .title {
+  font-size: 36px;
+  font-weight: 700;
   color: red;
-  font-size: 32px;
+  position: relative;
+  padding-bottom: 8px;
   margin-bottom: 30px;
+  text-align: center;
 }
+
+.title::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 60%;
+  height: 3px;
+  background-color: #00008B; /* Azul escuro */
+  border-radius: 2px;
+}
+
 
 .formulario {
   width: 100%;

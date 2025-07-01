@@ -5,7 +5,7 @@ import Welcome from './components/Welcome.vue'
 
 <template>
   <header>
-    <img alt="logo" class="logo" src="@/assets/logo.png" width="250" height="125" />
+    <img alt="logo" class="logo" src="@/assets/logo.png" width="280" height="125" />
     <div class="welcomemsg">
       <Welcome msg="Bem vindo(a)!" />
     </div>

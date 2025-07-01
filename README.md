@@ -42,11 +42,11 @@ Basta preencher os campos e apertar no botão "Enviar sugestão".
 📋 Gerenciar Sugestões
 Ao clicar no botão "Gerenciar Sugestões", você será direcionado para a tela de gerenciamento. Nela, é possível:
 
-🔄 Alterar o Status de uma Sugestão
-Clique no botão de status (disponível apenas quando a descrição estiver expandida).
-
 📖 Visualizar ou Ocultar a Descrição
 Clique sobre a sugestão para expandir ou ocultar sua descrição.
+
+🔄 Alterar o Status de uma Sugestão
+Clique no botão de status (disponível apenas quando a descrição estiver expandida).
 
 🔍 Filtros Disponíveis
 ✅ Filtro por Status

@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"go-api/src/answers"
 	"go-api/src/model"
 	"go-api/src/repository"
@@ -62,7 +61,6 @@ func CreateSuggestion(w http.ResponseWriter, r *http.Request) {
 		answers.Erro(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	fmt.Print("CHEGUEI AQUI")
 
 	var suggestion models.Suggestion
 
@@ -212,7 +210,6 @@ func UpdateSuggestionStatus(w http.ResponseWriter, r *http.Request) {
 		answers.Erro(w, http.StatusBadRequest, err)
 		return
 	}
-	fmt.Println("Status extraido:" + input.Status)
 
 	if err := models.ValidateStatus(input.Status); err != nil {
 		answers.Erro(w, http.StatusBadRequest, err)
@@ -230,7 +227,6 @@ func UpdateSuggestionStatus(w http.ResponseWriter, r *http.Request) {
 
 	// Busca status o atual no banco
 	currentStatus, err := repo.GetSuggestionStatusByID(uint(id))
-	fmt.Println("Status atual:" + currentStatus)
 	if err != nil {
 		answers.Erro(w, http.StatusInternalServerError, err)
 		return
